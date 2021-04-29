@@ -1,0 +1,7 @@
+- hosts: local
+  remote_user: "{{ ansible_ssh_user }}"
+  gather_facts: "{{ check_env | default(True) }}"
+  become: yes
+  become_method: sudo
+  tasks: 
+    - debug:
