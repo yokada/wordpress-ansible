@@ -1,0 +1,86 @@
+- name: Add OpenLitespeed signing key
+  apt_key:
+    url: '{{ item }}'
+    state: present
+  loop:
+    - http://rpms.litespeedtech.com/debian/lst_debian_repo.gpg
+    - http://rpms.litespeedtech.com/debian/lst_repo.gpg
+
+- name: Install OpenLitespeed repository
+  apt_repository:
+    repo: 'deb http://rpms.litespeedtech.com/debian/ {{ ansible_distribution_release }} main'
+    filename: lst_debian_repo
+
+- name: install OpenLightSpeed package
+  apt:
+    name: openlitespeed
+    state: present
+
+- name: Install LSPHP packages
+  apt:
+    name: '{{ item }}'
+    state: present
+  loop:
+    - lsphp74
+    - lsphp74-common
+    - lsphp74-curl
+    - lsphp74-dev
+    - lsphp74-json
+    - lsphp74-mysql
+    - lsphp74-opcache
+    - lsphp74-igbinary
+    - lsphp74-memcached
+    - lsphp74-redis
+    - lsphp74-pspell
+    - lsphp74-tidy
+
+- name: Setup OpenLiteSpeed main config
+  template:
+    src: lsws/conf/httpd_config.conf.j2
+    dest: /usr/local/lsws/conf/httpd_config.conf
+    owner: lsadm
+    group: lsadm
+  notify: restart lsws
+
+- name: Add user domain
+  user:
+    name: '{{ webserver_vhost.user }}'
+    state: present
+    create_home: true
+
+- name: Create virtual host docs directory
+  file:
+    path: '/home/{{ webserver_vhost.user }}/web/{{ webserver_vhost.domain }}/public_html'
+    state: directory
+    owner: '{{ webserver_vhost.user }}'
+    group: '{{ webserver_vhost.group }}'
+
+- name: Create virtual host logs directory
+  file:
+    path: '/home/{{ webserver_vhost.user }}/logs'
+    state: directory
+    owner: '{{ webserver_vhost.user }}'
+    group: '{{ webserver_vhost.group }}'
+
+- name: Create virtual host conf directory
+  file:
+    path: '/usr/local/lsws/conf/vhosts/{{ webserver_vhost.domain }}'
+    state: directory
+    owner: lsadm
+    group: lsadm
+
+- name: Set OpenLiteSpeed admin ui name/password
+  copy:
+    src: '{{ playbook_dir }}/templates/local/lsws/admin/conf/.env.htpasswd'
+    dest: /usr/local/lsws/admin/conf/htpasswd
+    owner: lsadm
+    group: lsadm
+  notify: restart lsws
+
+- name: Set virtual host
+  template:
+    src: lsws/conf/vhosts/vhconf.conf.j2
+    dest: '/usr/local/lsws/conf/vhosts/{{ webserver_vhost.domain }}/vhconf.conf'
+    owner: lsadm
+    group: lsadm
+  notify: restart lsws

@@ -3,5 +3,5 @@
   gather_facts: "{{ check_env | default(True) }}"
   become: yes
   become_method: sudo
-
   roles:
+    - openlitespeed

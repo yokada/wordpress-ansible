@@ -1,0 +1,19 @@
+- hosts: local
+  remote_user: "{{ ansible_ssh_user }}"
+  gather_facts: "{{ check_env | default(True) }}"
+  become: yes
+  become_method: sudo
+
+  pre_tasks:
+    - name: Print current ansible version
+      debug:
+        msg: "Ansible version is  {{ ansible_version.full }}"
+    - name: Deploy system wide env vars
+      template:
+        src: templates/local/.env.j2
+        dest: /etc/environment
+        owner: root
+        group: root
+
+  roles:
+    - openlitespeed

@@ -1,1 +1,7 @@
 .vagrant
+.env*
+logs/*
+!.gitkeep
+web/**/*
+!.gitkeep
+.DS_Store
