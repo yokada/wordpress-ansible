@@ -18,5 +18,10 @@
     - python-pexpect
 
 - name: Use python3 as default version
-  shell: update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+  shell: |
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1 &&
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 &&
+    update-alternatives --set python /usr/bin/python3 &&
+    update-alternatives --set pip /usr/bin/pip3
+
   changed_when: false

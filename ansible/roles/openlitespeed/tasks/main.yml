@@ -33,6 +33,7 @@
     - lsphp74-redis
     - lsphp74-pspell
     - lsphp74-tidy
+    - lsphp74-pear
 
 - name: Setup OpenLiteSpeed main config
   template:
@@ -85,3 +86,16 @@
     owner: lsadm
     group: lsadm
   notify: restart lsws
+
+- name: Use lsphp74 as default php command
+  shell: |
+    update-alternatives --install /usr/bin/php php /usr/local/lsws/lsphp74/bin/php 1 &&
+    update-alternatives --install /usr/bin/pecl pecl /usr/local/lsws/lsphp74/bin/pecl 1 &&
+    update-alternatives --install /usr/bin/php-config php-config /usr/local/lsws/lsphp74/bin/php-config 1 &&
+    update-alternatives --install /usr/bin/phpize phpize /usr/local/lsws/lsphp74/bin/phpize 1 &&
+    update-alternatives --set php /usr/local/lsws/lsphp74/bin/php &&
+    update-alternatives --set pecl /usr/local/lsws/lsphp74/bin/pecl &&
+    update-alternatives --set php-config /usr/local/lsws/lsphp74/bin/php-config &&
+    update-alternatives --set phpize /usr/local/lsws/lsphp74/bin/phpize
+
+  changed_when: false
