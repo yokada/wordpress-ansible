@@ -5,3 +5,6 @@ logs/*
 web/**/*
 !.gitkeep
 .DS_Store
+secret.yml
+.vault_password
+*.retry

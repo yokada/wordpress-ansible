@@ -1,0 +1,27 @@
+mariadb_version: '10.5'
+mariadb_repository_url: 'http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/{{ mariadb_version }}/ubuntu'
+mariadb_service: 'mariadb'
+mariadb_socket: '/var/run/mysqld/mysqld.sock'
+
+mariadb_install_packages:
+  - mariadb-server
+  - mariadb-client
+  - default-libmysqlclient-dev
+  - libmariadb-dev
+  - python3-pymysql
+
+mariadb_config_server: /etc/mysql/mariadb.conf.d/custom-server.cnf
+mariadb_config_client: /etc/mysql/mariadb.conf.d/custom-client.cnf
+mariadb_config_mysql_clients: /etc/mysql/mariadb.conf.d/custom-mysql-clients.cnf
+mariadb_config_logrotate: /etc/logrotate.d/mysql
+
+mariadb_client_cnf: {}
+mariadb_server_cnf: {}
+
+mariadb_databases:
+  - name: db1
+
+mariadb_users:
+  - name: db1usr
+    password: 'db1usrpass'
+    priv: 'db1.*:ALL'

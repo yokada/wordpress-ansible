@@ -1,0 +1,30 @@
+# {{ ansible_managed }}
+#
+# These groups are read by MariaDB command-line tools
+# Use it for options that affect only one utility
+#
+
+[mysql]
+{% for key, value in mariadb_client_cnf.items() %}
+{%     if value is defined and value %}
+{{ key }} = {{ value }}
+{%     else %}
+{{ key }}
+{%     endif %}
+{% endfor %}
+
+[mysql_upgrade]
+
+[mysqladmin]
+
+[mysqlbinlog]
+
+[mysqlcheck]
+
+[mysqldump]
+
+[mysqlimport]
+
+[mysqlshow]
+
+[mysqlslap]

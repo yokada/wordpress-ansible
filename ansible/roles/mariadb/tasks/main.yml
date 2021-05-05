@@ -1,0 +1,103 @@
+- name: Add repo key
+  apt_key:
+    keyserver: "hkp://keyserver.ubuntu.com:80"
+    id: "0xF1656F24C74CD1D8"
+    state: present
+  tags: mariadb
+
+- name: Add repository
+  apt_repository:
+    repo: 'deb [arch=amd64,i386,ppc64el] {{ mariadb_repository_url }} {{ ansible_distribution_release }} main'
+    state: present
+  tags: mariadb
+
+- name: Install mariadb
+  apt:
+    pkg: '{{ item }}'
+    update_cache: yes
+    cache_valid_time: 86400
+    state: present
+  loop: '{{ mariadb_install_packages }}'
+  tags: mariadb
+
+
+#
+# Configuration
+#
+- name: Install server config file
+  template:
+    src: etc/mysql/mariadb.conf.d/custom-server.cnf.j2
+    dest: "{{ mariadb_config_server }}"
+  notify: restart mariadb
+  tags: mariadb
+
+- name: Install client config file
+  template:
+    src: etc/mysql/mariadb.conf.d/custom-client.cnf.j2
+    dest: "{{ mariadb_config_client }}"
+  notify: restart mariadb
+  tags: mariadb
+
+- name: Install mysql-client tools config file
+  template:
+    src: etc/mysql/mariadb.conf.d/custom-mysql-clients.cnf.j2
+    dest: "{{ mariadb_config_mysql_clients }}"
+  notify: restart mariadb
+  tags: mariadb
+
+- name: Ensure service is started
+  service:
+    name: "{{ mariadb_service }}"
+    state: started
+    enabled: true
+  tags: mariadb
+
+#
+# Init databases
+#
+- name: Remove the test database
+  mysql_db:
+    name: test
+    login_user: root
+    login_unix_socket: "{{ mariadb_socket }}"
+    state: absent
+  tags: mariadb
+
+- name: Create user defined databases
+  mysql_db:
+    name: "{{ item.name }}"
+    login_user: root
+    login_unix_socket: "{{ mariadb_socket }}"
+    state: present
+  with_items: "{{ mariadb_databases }}"
+  register: db_creation
+  tags: mariadb
+
+
+#
+# Init DB users
+#
+- name: Remove anonymous users
+  mysql_user:
+    name: ''
+    host_all: true
+    login_user: root
+    login_unix_socket: "{{ mariadb_socket }}"
+    state: absent
+  no_log: true
+  tags: mariadb
+
+- name: Create the users
+  mysql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    host: "{{ item.host|default('localhost') }}"
+    priv: "{{ item.priv }}"
+    append_privs: "{{ item.append_privs|default('no') }}"
+    login_user: root
+    login_unix_socket: "{{ mariadb_socket }}"
+    state: present
+  no_log: true
+  with_items: "{{ mariadb_users }}"
+  tags: mariadb
+

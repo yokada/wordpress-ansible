@@ -50,7 +50,7 @@
 
 - name: Create virtual host docs directory
   file:
-    path: '/home/{{ webserver_vhost.user }}/web/{{ webserver_vhost.domain }}/public_html'
+    path: '/home/{{ webserver_vhost.user }}/web/{{ webserver_vhost.domain }}/public'
     state: directory
     owner: '{{ webserver_vhost.user }}'
     group: '{{ webserver_vhost.group }}'
@@ -70,11 +70,12 @@
     group: lsadm
 
 - name: Set OpenLiteSpeed admin ui name/password
-  copy:
-    src: '{{ playbook_dir }}/templates/local/lsws/admin/conf/.env.htpasswd'
-    dest: /usr/local/lsws/admin/conf/htpasswd
-    owner: lsadm
-    group: lsadm
+  expect:
+    command: /usr/local/lsws/admin/misc/admpass.sh
+    responses:
+      "User name.*": "{{ secret.lsws.admin_name }}"
+      "Password.*": "{{ secret.lsws.admin_password }}"
+      "Retype password.*": "{{ secret.lsws.admin_password }}"
   notify: restart lsws
 
 - name: Set virtual host

@@ -27,7 +27,7 @@ errorlog $SERVER_ROOT/logs/error.log {
     rollingSize             10M
     enableStderrLog         1
 }
-   
+
 accessLog $SERVER_ROOT/logs/access.log {
     rollingSize             10M
     keepDays                30
@@ -35,7 +35,7 @@ accessLog $SERVER_ROOT/logs/access.log {
     logReferer              1
     logUserAgent            1
 }
-   
+
 expires {
     enableExpires           1
     expiresByType           image/*=A604800,text/css=A604800,application/x-javascript=A604800,application/javascript=A604800,font/*=A604800,application/x-font-ttf=A604800
@@ -199,7 +199,7 @@ nodeDefaults {
     procSoftLimit            500
     procHardLimit            600
 }
-   
+
 vhTemplate centralConfigLog {
     templateFile             $SERVER_ROOT/conf/templates/ccl.conf
     listeners                Default

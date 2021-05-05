@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-docRoot                 $VH_ROOT/web/$VH_NAME/public_html
+docRoot                 $VH_ROOT/web/$VH_NAME/public
 vhDomain                $VH_NAME
 
 adminEmails             {{ webserver_vhost.admin_email | default(server_admin) }}

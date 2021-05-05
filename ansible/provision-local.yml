@@ -3,17 +3,32 @@
   gather_facts: "{{ check_env | default(True) }}"
   become: yes
   become_method: sudo
+  vars_files:
+    - vars/local/secret.yml
 
   pre_tasks:
-    - name: Print current ansible version
+    - name: Debug secret
       debug:
-        msg: "Ansible version is  {{ ansible_version.full }}"
-    - name: Deploy system wide env vars
-      template:
-        src: templates/local/.env.j2
-        dest: /etc/environment
-        owner: root
-        group: root
+        msg: '{{ secret }}'
+      tags: 
+        - debug
+    - name: Assert current ansible version
+      assert:
+        that:
+          - ansible_version.full is version('2.10.8', '>=')
+        msg: "Ansible version is greater equals than '2.10.8'"
+    - name: Assert OS distribution and version
+      assert:
+        that:
+          - hostvars[inventory_hostname].ansible_distribution == 'Ubuntu'
+          - hostvars[inventory_hostname].ansible_distribution_version is version('20.04', '=')
+          - ansible_distribution_release == 'focal'
+        msg: "OS distribution == 'Ubuntu' && version == '20.04'"
+
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
   roles:
+    - required-packages
     - openlitespeed
+    - mariadb
