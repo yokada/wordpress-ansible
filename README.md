@@ -33,18 +33,6 @@ $ pipenv install ansible --dev
 # 3. build local dev server
 
 ```shell
-$ htpasswd -b -B -c ansible/templates/local/lsws/admin/conf/htpasswd LSWS管理UIログイン名 LSWS管理UIログインパスワード
-```
-
-```shell
-$ vi ansible/local/.env.j2
-
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
-OPENLITESPEED_ADMIN="{管理UIログイン名}"
-OPENLITESPEED_ADMIN_PASSWORD="{管理UIパスワード}"
-```
-
-```shell
 $ pipenv shell
 $ vagrant up --provision
 ```
