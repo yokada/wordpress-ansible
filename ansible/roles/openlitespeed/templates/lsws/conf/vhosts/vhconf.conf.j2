@@ -3,7 +3,7 @@
 docRoot                 $VH_ROOT/web/$VH_NAME/public
 vhDomain                $VH_NAME
 
-adminEmails             {{ webserver_vhost.admin_email | default(server_admin) }}
+adminEmails             {{ webserver_vhost_admin_email | default(server_admin) }}
 enableGzip              1
 enableIpGeo             1
 
@@ -28,10 +28,10 @@ accesslog $VH_ROOT/logs/$VH_NAME.access_log {
 }
 
 scripthandler  {
-    add                 lsapi:{{ webserver_vhost.user }} php
+    add                 lsapi:{{ webserver_vhost_user }} php
 }
 
-extprocessor {{ webserver_vhost.user }} {
+extprocessor {{ webserver_vhost_user }} {
     type                lsapi
     address             uds://tmp/lshttpd/$VH_NAME.sock
     maxConns            10
@@ -42,9 +42,9 @@ extprocessor {{ webserver_vhost.user }} {
     pcKeepAliveTimeout  1
     respBuffer          0
     autoStart           1
-    path                /usr/local/lsws/{{ webserver_vhost.lsphp_version }}/bin/lsphp
-    extUser             {{ webserver_vhost.user }}
-    extGroup            {{ webserver_vhost.group }}
+    path                /usr/local/lsws/{{ webserver_vhost_lsphp_version }}/bin/lsphp
+    extUser             {{ webserver_vhost_user }}
+    extGroup            {{ webserver_vhost_group }}
     memSoftLimit        2047M
     memHardLimit        2047M
     procSoftLimit       400
@@ -60,10 +60,10 @@ rewrite  {
     autoLoadHtaccess    1
 }
 
-{% if webserver_vhost.ssl_enabled %}
+{% if webserver_vhost_ssl_enabled %}
 vhssl  {
-  keyFile               {{ webserver_vhost.ssl_certificate_key }}
-  certFile              {{ webserver_vhost.ssl_certificate }}
+  keyFile               {{ webserver_vhost_ssl_certificate_key }}
+  certFile              {{ webserver_vhost_ssl_certificate }}
   certChain             1
 }
 {% endif %}

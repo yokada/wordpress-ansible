@@ -1,0 +1,12 @@
+wordpress_dir: 'wordpress'
+wordpress_webroot: '/var/www/public'
+wordpress_version: 5.7.1
+wordpress_checksum: 'sha1:296bc228c4f4d67d7da8814079f86516f6c2337d'
+webserver_front_url: 'http://localhost/'
+webserver_admin_url: 'http://localhost/{{ wordpress_dir }}'
+wordpress_site_title: 'default blog title'
+wordpress_dbname: 'db1'
+wordpress_dbuser: 'db1usr'
+wordpress_dbpasswd: 'password'
+wordpress_dbhost: 'localhost'
+wordpress_dbcharset: 'utf8'

@@ -1,12 +1,11 @@
-webserver_vhost:
-  user: vagrant
-  group: vagrant
-  domain: wpdev.test
-  admin_email: admin@wpdev.test
-  lsphp_version: lsphp74
-  ssl_enabled: True,
-  ssl_certificate: /path/to/ssl/certificate
-  ssl_certificate_key: /path/to/ssl/certificate_key
+webserver_vhost_user: vagrant
+webserver_vhost_group: vagrant
+webserver_vhost_domain: wpdev.test
+webserver_vhost_admin_email: admin@wpdev.test
+webserver_vhost_lsphp_version: lsphp74
+webserver_vhost_ssl_enabled: true
+webserver_vhost_ssl_certificate: /path/to/ssl/certificate
+webserver_vhost_ssl_certificate_key: /path/to/ssl/certificate_key
 
 mariadb_default_character_set: utf8mb4
 mariadb_client_cnf:
@@ -18,3 +17,12 @@ mariadb_server_cnf:
   slow_query_log_file: '/var/log/mysql/mariadb-slow.log'
   long_query_time: 3
   log_error: '/var/log/mysql/error.log'
+
+wordpress_webroot: "/home/{{ webserver_vhost_user }}/web/{{ webserver_vhost_domain }}"
+wordpress_front_url: 'http://{{ webserver_vhost_domain }}/'
+wordpress_core_url: 'http://{{ webserver_vhost_domain }}/{{ wordpress_dir }}'
+wordpress_site_title: 'ローカル開発用ブログ'
+wordpress_dbname: 'db1'
+wordpress_dbuser: 'db1usr'
+wordpress_dbpasswd: '{{ secret.db.passwd }}'
+wordpress_dbhost: 'localhost'

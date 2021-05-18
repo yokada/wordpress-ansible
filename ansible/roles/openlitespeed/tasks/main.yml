@@ -45,27 +45,27 @@
 
 - name: Add user domain
   user:
-    name: '{{ webserver_vhost.user }}'
+    name: '{{ webserver_vhost_user }}'
     state: present
     create_home: true
 
 - name: Create virtual host docs directory
   file:
-    path: '/home/{{ webserver_vhost.user }}/web/{{ webserver_vhost.domain }}/public'
+    path: '/home/{{ webserver_vhost_user }}/web/{{ webserver_vhost_domain }}/public'
     state: directory
-    owner: '{{ webserver_vhost.user }}'
-    group: '{{ webserver_vhost.group }}'
+    owner: '{{ webserver_vhost_user }}'
+    group: '{{ webserver_vhost_group }}'
 
 - name: Create virtual host logs directory
   file:
-    path: '/home/{{ webserver_vhost.user }}/logs'
+    path: '/home/{{ webserver_vhost_user }}/logs'
     state: directory
-    owner: '{{ webserver_vhost.user }}'
-    group: '{{ webserver_vhost.group }}'
+    owner: '{{ webserver_vhost_user }}'
+    group: '{{ webserver_vhost_group }}'
 
 - name: Create virtual host conf directory
   file:
-    path: '/usr/local/lsws/conf/vhosts/{{ webserver_vhost.domain }}'
+    path: '/usr/local/lsws/conf/vhosts/{{ webserver_vhost_domain }}'
     state: directory
     owner: lsadm
     group: lsadm
@@ -82,7 +82,7 @@
 - name: Set virtual host
   template:
     src: lsws/conf/vhosts/vhconf.conf.j2
-    dest: '/usr/local/lsws/conf/vhosts/{{ webserver_vhost.domain }}/vhconf.conf'
+    dest: '/usr/local/lsws/conf/vhosts/{{ webserver_vhost_domain }}/vhconf.conf'
     owner: lsadm
     group: lsadm
   notify: restart lsws

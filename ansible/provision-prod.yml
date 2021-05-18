@@ -3,5 +3,8 @@
   gather_facts: "{{ check_env | default(True) }}"
   become: yes
   become_method: sudo
+  vars_files:
+    - vars/prod/secret.yml
+
   roles:
     - openlitespeed

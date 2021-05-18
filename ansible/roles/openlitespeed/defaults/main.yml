@@ -2,12 +2,11 @@ olsws_listen_addr: '*'
 olsws_http_port: 80
 olsws_https_port: 443
 
-webserver_vhost:
-  user: vagrant
-  group: vagrant
-  domain: example.test
-  admin_email: admin@example.com
-  lsphp_version: lsphp74
-  ssl_enabled: True,
-  ssl_certificate: /path/to/ssl/certificate
-  ssl_certificate_key: /path/to/ssl/certificate_key
+webserver_vhost_user: vagrant
+webserver_vhost_group: vagrant
+webserver_vhost_domain: example.test
+webserver_vhost_admin_email: admin@example.com
+webserver_vhost_lsphp_version: lsphp74
+webserver_vhost_ssl_enabled: true
+webserver_vhost_ssl_certificate: /path/to/ssl/certificate
+webserver_vhost_ssl_certificate_key: /path/to/ssl/certificate_key

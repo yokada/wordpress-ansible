@@ -231,11 +231,11 @@ module cache {
     checkPublicCache 1
 }
 
-{% if webserver_vhost is defined %}
+{% if webserver_vhost_domain is defined %}
 listener Default {
     address             {{ olsws_listen_addr }}:{{ olsws_http_port }}
     secure              0
-    map                 {{ webserver_vhost.domain }} {{ webserver_vhost.domain }}
+    map                 {{ webserver_vhost_domain }} {{ webserver_vhost_domain }}
 }
 
 listener SSL {
@@ -244,13 +244,13 @@ listener SSL {
     keyFile             $SERVER_ROOT/admin/conf/webadmin.key
     certFile            $SERVER_ROOT/admin/conf/webadmin.crt
     certChain           1
-{%  if webserver_vhost.ssl_enabled %}
-    map                 {{ webserver_vhost.domain }} {{ webserver_vhost.domain }}
+{%  if webserver_vhost_ssl_enabled %}
+    map                 {{ webserver_vhost_domain }} {{ webserver_vhost_domain }}
 {%  endif %}
 }
 
-virtualHost {{ webserver_vhost.domain }} {
-    vhRoot              /home/{{ webserver_vhost.user }}
+virtualHost {{ webserver_vhost_domain }} {
+    vhRoot              /home/{{ webserver_vhost_user }}
     configFile          $SERVER_ROOT/conf/vhosts/$VH_NAME/vhconf.conf
     allowSymbolLink     1
     enableScript        1

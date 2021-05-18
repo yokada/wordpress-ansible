@@ -25,11 +25,11 @@
           - ansible_distribution_release == 'focal'
         msg: "OS distribution == 'Ubuntu' && version == '20.04'"
 
-  environment:
-    DEBIAN_FRONTEND: noninteractive
+  # environment:
+  #   DEBIAN_FRONTEND: noninteractive
 
   roles:
     - required-packages
     - openlitespeed
     - mariadb
-    - composer-php
+    - wordpress

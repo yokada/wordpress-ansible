@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
   # To refresh settings below, use `vagrant reload`
-  config.vm.box = "generic/ubuntu2004"
+  config.vm.box = "ubuntu/focal64"
   config.vm.hostname = "wordpress-local-ubuntu2004"
   config.vm.network "private_network", ip: "192.168.33.60"
   config.vm.synced_folder "./web", "/home/vagrant/web/wpdev.test", create: true
